@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+
+void swap(int arr[], int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(arr, i, j);
+        }
+    }
+    swap(arr, i + 1, high);
+    return i + 1;
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pi = partition(arr, low, high);
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+int main()
+{
+    clock_t start, end;
+    float time;
+    int n, ch, key;
+    FILE *file;
+    int found = 0;
+
+    printf("Enter The Size Of The Array: ");
+    scanf("%d", &n);
+
+    int arr[n]; 
+
+    printf("1) Best-Case\n2) Average-Case\n3) Worst-Case\nEnter your choice: ");
+    scanf("%d", &ch);
+
+    switch (ch)
+    {
+    case 1:
+        file = fopen("C:/Users/ASUS/OneDrive/Desktop/DAA_lab/BEST.txt", "r");
+        break;
+    case 2:
+        file = fopen("C:/Users/ASUS/OneDrive/Desktop/DAA_lab/AVERAGE.txt", "r");
+        break;
+    case 3:
+        file = fopen("C:/Users/ASUS/OneDrive/Desktop/DAA_lab/WROST.txt", "r");
+        break;
+    default:
+        printf("INVALID CHOICE\n");
+        return 1;
+    }
+
+    if (file == NULL)
+    {
+        printf("Error opening file!\n");
+        return 1;
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        fscanf(file, "%d", &arr[i]);
+    }
+    fclose(file);
+
+
+    start = clock();
+
+    quickSort(arr, 0, n - 1);
+
+    end = clock();
+    
+
+    time = ((float)(end - start)) / CLOCKS_PER_SEC;
+
+    printf("Time taken: %lf seconds\n", time);
+
+    return 0;
+}
